@@ -64,8 +64,6 @@ jobs:
           sleep 180s 
           kubectl exec -it  $POD_NAME -- airflow dags list
           kubectl exec -it  $POD_NAME -- airflow dags unpause init_dag
-         # run_id=$(date -u +'%Y-%m-%dT%H:%M:%S+00:00')
-         # echo "run id:$run_id"
           output=$(kubectl exec -it  $POD_NAME -- airflow dags trigger init_dag -o json)
           execution_date=output[0]["logical_date"]
           # Add a loop to check the DAG state until it becomes 'success' or 'failed'
@@ -81,6 +79,7 @@ jobs:
             fi
           done
       if: success()
+
     - name: upgrade  Airflow with Helm
       working-directory: .github
       run: |
