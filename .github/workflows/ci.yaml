@@ -58,7 +58,7 @@ jobs:
       run: | 
           kubectl get pods
           kubectl get services
-          POD_NAME=$(kubectl get pods -o=jsonpath='{.items[?(@.metadata.name=="worker")].metadata.name}' | awk 'NR==1')
+          POD_NAME=($(kubectl get pods | grep -E 'worker' | awk '{print $1}'))
           echo "Pod Name: $POD_NAME"
           kubectl exec -it  $POD_NAME -- airflow dags list
 
