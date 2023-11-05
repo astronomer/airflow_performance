@@ -13,7 +13,7 @@ gitSync:
   maxFailures: 0
   # subpath within the repo where dags are located
   # should be "" if dags are at repo root
-  subPath: ""
+  subPath: "dags"
   wait: 5
   containerName: git-sync
   uid: 65533
