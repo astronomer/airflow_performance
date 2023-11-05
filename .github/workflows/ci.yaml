@@ -1,0 +1,62 @@
+name: Install Airflow with Helm
+
+on:
+  workflow_dispatch:
+    inputs:
+      git_rev:
+        description: 'git revision'
+        required: false
+        default: ''
+
+jobs:
+  install-airflow:
+    runs-on: ubuntu-latest
+    env:
+         RELEASE_NAME: "example-release"
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - run:
+        name: Install Kind
+        command: |
+          curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.11.1/kind-linux-amd64
+          chmod +x ./kind
+          sudo mv ./kind /usr/local/bin/
+    - run:
+        name: create kind cluster
+        command: |
+          kind create cluster --image kindest/node:v1.21.1
+
+    - run:
+        name: Install kubectl
+        command: |
+          curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/linux/amd64/kubectl
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+    - run:
+        name: install helm
+        command: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod +x get_helm.sh
+          ./get_helm.sh  
+
+    - run:
+        name: Add Helm repository
+        run: |
+            helm repo add apache-airflow https://airflow.apache.org
+            helm repo update
+
+        if: success()
+
+
+    - name: Install Airflow with Helm
+      run: helm install $RELEASE_NAME apache-airflow/airflow -f ./values.yaml
+      if: success()
+
+    - name: verify airflow installed
+      run: kubectl get pods
+      if: success()
+
