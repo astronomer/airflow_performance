@@ -15,8 +15,7 @@ jobs:
          RELEASE_NAME: "example-release"
 
     steps:
-    -  Checkout
-
+    - checkout
     - run:
         name: Install Kind
         command: |
