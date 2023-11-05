@@ -1,6 +1,4 @@
 executor: "CeleryExecutor"
-enableBuiltInSecretEnvVars:
-  AIRFLOW__CORE__LOAD_EXAMPLES: True
 gitSync:
   enabled: true
 
@@ -16,6 +14,9 @@ gitSync:
   # subpath within the repo where dags are located
   # should be "" if dags are at repo root
   subPath: ""
+  wait: 5
+  containerName: git-sync
+  uid: 65533
 
 workers:
   # Number of airflow celery workers in StatefulSet
