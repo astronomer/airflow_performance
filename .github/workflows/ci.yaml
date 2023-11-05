@@ -68,8 +68,10 @@ jobs:
           echo "run id:$run_id"
           kubectl exec -it  $POD_NAME -- airflow dags trigger init_dag -r $run_id
           # Add a loop to check the DAG state until it becomes 'success' or 'failed'
+          sleep 60s
+          kubectl exec -it $POD_NAME -- airflow dags state init_dag $run_id
           while true; do
-            state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag  $run_id)
+            state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag $run_id |  awk '{print $1}')
             if [ "$state" == "success" ] || [ "$state" == "failed" ]; then
               echo "DAG state is $state."
               exit 1
@@ -78,11 +80,9 @@ jobs:
               sleep 5  # You can adjust the sleep interval as needed
             fi
           done
-      
-          
-          
-          
-        
-
       if: success()
-
+    - name: updgrade  Airflow with Helm
+      working-directory: .github
+      run: |
+            helm upgrade $RELEASE_NAME apache-airflow/airflow -f ./values.yaml --set defaultAirflowTag=2.7.3rc1
+      if: success()
