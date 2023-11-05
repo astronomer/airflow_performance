@@ -1,4 +1,6 @@
 executor: "CeleryExecutor"
+defaultAirflowRepository: apache/airflow
+defaultAirflowTag: "2.7.2"
 dags:
   gitSync:
     enabled: true
