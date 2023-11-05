@@ -1,22 +1,23 @@
 executor: "CeleryExecutor"
-gitSync:
-  enabled: True
+dags:
+  gitSync:
+    enabled: true
 
-  # git repo clone url
-  # ssh example: git@github.com:apache/airflow.git
-  # https example: https://github.com/apache/airflow.git
-  repo: https://github.com/astronomer/airflow_performance.git
-  branch: main
-  rev: HEAD
-  depth: 1
-  # the number of consecutive failures allowed before aborting
-  maxFailures: 0
-  # subpath within the repo where dags are located
-  # should be "" if dags are at repo root
-  subPath: "dags"
-  wait: 5
-  containerName: git-sync
-  uid: 65533
+    # git repo clone url
+    # ssh example: git@github.com:apache/airflow.git
+    # https example: https://github.com/apache/airflow.git
+    repo: https://github.com/astronomer/airflow_performance.git
+    branch: main
+    rev: HEAD
+    depth: 1
+    # the number of consecutive failures allowed before aborting
+    maxFailures: 0
+    # subpath within the repo where dags are located
+    # should be "" if dags are at repo root
+    subPath: ""
+    wait: 5
+    containerName: git-sync
+    uid: 65533
 
 workers:
   # Number of airflow celery workers in StatefulSet
