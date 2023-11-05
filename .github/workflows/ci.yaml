@@ -15,8 +15,7 @@ jobs:
          RELEASE_NAME: "example-release"
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    -  Checkout
 
     - run:
         name: Install Kind
@@ -48,15 +47,15 @@ jobs:
         run: |
             helm repo add apache-airflow https://airflow.apache.org
             helm repo update
-
         if: success()
 
+    - run:
+        name: Install Airflow with Helm
+        run: helm install $RELEASE_NAME apache-airflow/airflow -f ./values.yaml
+        if: success()
 
-    - name: Install Airflow with Helm
-      run: helm install $RELEASE_NAME apache-airflow/airflow -f ./values.yaml
-      if: success()
-
-    - name: verify airflow installed
-      run: kubectl get pods
-      if: success()
+    - run:
+        name: verify airflow installed
+        run: kubectl get pods
+        if: success()
 
