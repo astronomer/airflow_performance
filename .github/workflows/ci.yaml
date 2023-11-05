@@ -60,6 +60,7 @@ jobs:
           kubectl get services
           POD_NAME=($(kubectl get pods | grep -E 'worker' | awk '{print $1}'))
           echo "Pod Name: $POD_NAME"
+          kubectl exec -it  $POD_NAME -- airflow version
           kubectl exec -it  $POD_NAME -- airflow dags list
 
       if: success()
