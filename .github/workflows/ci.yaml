@@ -11,7 +11,9 @@ on:
 jobs:
   install-airflow:
     runs-on: ubuntu-latest
-   # env:
+    env:
+      RELEASE_NAME: "example-release"
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -49,13 +51,12 @@ jobs:
     - name: Install Airflow with Helm
       working-directory: .github
       run: |
-            helm install apache-airflow/airflow -f ./values.yaml
+            helm install $RELEASE_NAME apache-airflow/airflow -f ./values.yaml
       if: success()
 
     - name: verify airflow installed
       run: | 
           kubectl get pods
           kubectl get services
-
       if: success()
 
