@@ -7,21 +7,14 @@ Note: The link to uploaded file is a disposable link i.e it can only be open onc
       So please don't open the link.
 """
 import os
-from urllib.parse import quote
 import logging
 from collections import defaultdict
 from datetime import datetime, timedelta
 from functools import lru_cache
 from pprint import pprint
-from shelve import DbfilenameShelf
 from statistics import mean, stdev
-# from tkinter import Variable
 from typing import Dict, List, Optional
-
-import openpyxl as openpyxl
-import pygsheets
 from airflow.models import Variable, Connection
-# import pygsheets
 
 import requests
 from airflow import DAG, settings
@@ -33,7 +26,6 @@ from airflow.operators.python import PythonOperator
 from airflow.utils.dates import days_ago
 from airflow.utils.db import create_session
 from airflow.version import version
-from openpyxl import Workbook
 from sqlalchemy import func, distinct, create_engine
 import json
 from airflow.providers.slack.operators.slack_webhook import SlackWebhookOperator
