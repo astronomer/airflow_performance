@@ -71,7 +71,7 @@ jobs:
           kubectl exec -it  $POD_NAME -- airflow dags trigger init_dag -o json
           output=$(kubectl exec -it  $POD_NAME -- airflow dags trigger init_dag -o json)
           echo "output is : $output"
-          $execution_date=$(echo $output | jq '.[0].logical_date')
+          $execution_date=$(echo $output | grep -o '\[{"conf":.*\]' | jq -r '.[0].logical_date)
           echo "execution_date: $execution_date"
           # Add a loop to check the DAG state until it becomes 'success' or 'failed'
           kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date
