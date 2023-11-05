@@ -1,4 +1,6 @@
 executor: "CeleryExecutor"
+enableBuiltInSecretEnvVars:
+  AIRFLOW__CORE__LOAD_EXAMPLES: True
 gitSync:
   enabled: true
 
