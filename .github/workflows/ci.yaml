@@ -49,6 +49,7 @@ jobs:
       if: success()
 
     - name: Install Airflow with Helm
+      working-directory: .github
       run: |
             helm install $RELEASE_NAME apache-airflow/airflow -f ./values.yaml
       if: success()
