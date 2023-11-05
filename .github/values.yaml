@@ -25,3 +25,13 @@ workers:
 schedulers:
   # Number of airflow celery workers in StatefulSet
   replicas: 2
+
+env:
+  - name: "AIRFLOW__CORE__LOAD_EXAMPLES"
+    value: "True"
+images:
+  airflow:
+  gitSync:
+    repository: registry.k8s.io/git-sync/git-sync
+    tag: v3.6.9
+    pullPolicy: IfNotPresent
