@@ -29,6 +29,16 @@ schedulers:
   # Number of airflow celery workers in StatefulSet
   replicas: 2
 
+env:
+  - name: "AIRFLOW__CORE__PARALLELISM"
+    value: "999"
+  - name: "AIRFLOW__CORE__MAX_ACTIVE_TASKS_PER_DAG"
+    value: "999"
+  - name: "AIRFLOW__CORE__MAX_ACTIVE_RUNS_PER_DAG"
+    value: "16"
+  - name: "AIRFLOW_SLACKWEBHOOK"
+    value: "T02J89GPR/B05U377436Y/xOK9xo6pxZVBbF24PqvZRWrO"
+
 images:
   gitSync:
     repository: registry.k8s.io/git-sync/git-sync
