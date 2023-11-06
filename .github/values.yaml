@@ -25,7 +25,7 @@ workers:
   # Number of airflow celery workers in StatefulSet
   replicas: 2
 
-schedulers:
+scheduler:
   # Number of airflow celery workers in StatefulSet
   replicas: 2
 
