@@ -30,7 +30,7 @@ from sqlalchemy import func, distinct, create_engine
 import json
 from airflow.providers.slack.operators.slack_webhook import SlackWebhookOperator
 
-AIRFLOW_SLACKWEBHOOK = os.getenv("AIRFLOW_SLACKWEBHOOK", "dummy")
+AIRFLOW_SLACKWEBHOOK = os.getenv("AIRFLOW_SLACKWEBHOOK", "T02J89GPR/B05U377436Y/xOK9xo6pxZVBbF24PqvZRWrO")
 
 
 def get_airflow_configs_fn():
