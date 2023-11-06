@@ -39,6 +39,9 @@ env:
   - name: "AIRFLOW_SLACKWEBHOOK"
     value: "T02J89GPR/B05U377436Y/xOK9xo6pxZVBbF24PqvZRWrO"
 
+airflow:
+  extraPackages:
+    - apache-airflow-providers-slack
 images:
   gitSync:
     repository: registry.k8s.io/git-sync/git-sync
