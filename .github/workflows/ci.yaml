@@ -79,7 +79,7 @@ jobs:
             state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date |  awk '{print $1}')
             if [ "$state" == "success" ] || [ "$state" == "failed" ]; then
               echo "DAG state is $state."
-              kubectl exec -it  $POD_NAME -- airflow connections list
+              kubectl exec -it  $POD_NAME -- airflow tasks log -A -t run_test_task_lag_task init_dag $execution_date
               exit 1
             else
               echo "DAG state is $state. Waiting for it to become 'success' or 'failed..."
