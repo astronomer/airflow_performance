@@ -23,11 +23,11 @@ dags:
 
 workers:
   # Number of airflow celery workers in StatefulSet
-  replicas: 2
+  replicas: 3
 
 scheduler:
   # Number of airflow celery workers in StatefulSet
-  replicas: 2
+  replicas: 3
 
 env:
   - name: "AIRFLOW__CORE__PARALLELISM"
