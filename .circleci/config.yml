@@ -90,10 +90,10 @@ jobs:
          
 
     - run:
-       name: verify airflow installed
+       name: verify airflow installed after upgrade
        command: |
             kubectl get pods
-              POD_NAME=($(kubectl get pods | grep -E 'worker' | awk '{print $1}'))
+            POD_NAME=($(kubectl get pods | grep -E 'worker' | awk '{print $1}'))
             echo "Pod Name: $POD_NAME"
             kubectl exec -it  $POD_NAME -- airflow version
             sleep 180s 
@@ -128,7 +128,7 @@ jobs:
               
              
              
-      
+
 workflows:
   turbulence-ci:
     jobs:
