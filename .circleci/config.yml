@@ -66,6 +66,7 @@ jobs:
             kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date
             while true; do
               state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date |  awk '{print $1}')
+              echo "state is $state"
               if [ "$state" == "success" ]; then
                 echo "DAG state is $state."
                 exit 0
