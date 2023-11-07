@@ -113,6 +113,7 @@ jobs:
         echo "execution_date: $execution_date"
         # Add a loop to check the DAG state until it becomes 'success' or 'failed'
         kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date
+        echo "PARALLELISM is $AIRFLOW__CORE__PARALLELISM"
         while true; do
           state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date |  awk '{print $1}')
           if [ "$state" == "success" ]; then
