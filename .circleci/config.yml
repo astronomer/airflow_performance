@@ -87,6 +87,7 @@ jobs:
        name: upgrade airflow
        command: |
           helm upgrade $RELEASE_NAME apache-airflow/airflow -f ./values.yaml --set defaultAirflowTag=2.7.3rc1
+          sleep 300s
          
 
     - run:
