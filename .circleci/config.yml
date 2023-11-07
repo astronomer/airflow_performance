@@ -52,7 +52,7 @@ jobs:
         name: verify airflow installed
         command: |
             kubectl get pods
-            POD_NAME=($(kubectl get pods | grep -E 'worker' | awk '{print $1}'))
+              POD_NAME=($(kubectl get pods | grep -E 'worker' | awk '{print $1}'))
             echo "Pod Name: $POD_NAME"
             kubectl exec -it  $POD_NAME -- airflow version
             sleep 180s 
@@ -66,16 +66,19 @@ jobs:
             kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date
             while true; do
               state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date |  awk '{print $1}' | sed 's/\x1B\[[0-9;]*[mGK]//g')
+              state="${state#"${state%%[![:space:]]*}"}"
+              state="${state%"${state##*[![:space:]]}"}"
               echo "state is $state"
+              
               if [ "$state" == "success" ]; then
-                echo "DAG state is $state."
-                exit 0
+                 echo "DAG state is $state."
+                 exit 0
               elif [ "$state" == "failed" ]; then
                  echo "DAG state is $state."
-                exit 1
+                 exit 1
               else
-                echo "DAG state is $state waiting for it to become 'success' or 'failed..."
-                sleep 300  # You can adjust the sleep interval as needed
+                 echo "state: $state"
+                 sleep 300  # You can adjust the sleep interval as needed
               fi
             done
              
