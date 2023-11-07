@@ -75,7 +75,7 @@ jobs:
                 exit 1
               else
                 echo "DAG state is $state. Waiting for it to become 'success' or 'failed..."
-                sleep 5  # You can adjust the sleep interval as needed
+                sleep 300  # You can adjust the sleep interval as needed
               fi
             done
              
