@@ -65,7 +65,7 @@ jobs:
             # Add a loop to check the DAG state until it becomes 'success' or 'failed'
             kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date
             while true; do
-              state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date |  awk '{print $1}')
+              state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date |  awk '{print $1}' | sed 's/\x1B\[[0-9;]*[mGK]//g')
               echo "state is $state"
               if [ "$state" == "success" ]; then
                 echo "DAG state is $state."
@@ -74,7 +74,7 @@ jobs:
                  echo "DAG state is $state."
                 exit 1
               else
-                echo "DAG state is $state. Waiting for it to become 'success' or 'failed..."
+                echo "DAG state is $state waiting for it to become 'success' or 'failed..."
                 sleep 300  # You can adjust the sleep interval as needed
               fi
             done
