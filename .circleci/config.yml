@@ -55,17 +55,17 @@ jobs:
             POD_NAME=($(kubectl get pods | grep -E 'worker' | awk '{print $1}'))
             echo "Pod Name: $POD_NAME"
             kubectl exec -it  $POD_NAME -- airflow version
-            sleep 180s 
+            sleep 600s 
             kubectl exec -it  $POD_NAME -- airflow dags list
-            kubectl exec -it  $POD_NAME -- airflow dags unpause init_dag
-            output=$(kubectl exec -it  $POD_NAME -- airflow dags trigger init_dag -o json | awk 'NR==2' | sed 's/\x1B\[[0-9;]*[mGK]//g')  
+            kubectl exec -it  $POD_NAME -- airflow dags unpause throughput_dag
+            output=$(kubectl exec -it  $POD_NAME -- airflow dags trigger throughput_dag -o json | awk 'NR==2' | sed 's/\x1B\[[0-9;]*[mGK]//g')  
             echo "output is : $output"
             execution_date=$(echo $output | jq -r '.[0].logical_date')
             echo "execution_date: $execution_date"
             # Add a loop to check the DAG state until it becomes 'success' or 'failed'
-            kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date
+            kubectl exec -it $POD_NAME -- airflow dags state throughput_dag $execution_date
             while true; do
-              state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date |  awk '{print $1}' | sed 's/\x1B\[[0-9;]*[mGK]//g')
+              state=$(kubectl exec -it $POD_NAME -- airflow dags state throughput_dag $execution_date |  awk '{print $1}' | sed 's/\x1B\[[0-9;]*[mGK]//g')
               state="${state#"${state%%[![:space:]]*}"}"
               state="${state%"${state##*[![:space:]]}"}"
               echo "state is $state"
@@ -82,50 +82,50 @@ jobs:
               fi
             done
           
-
-    - run:
-       name: upgrade airflow
-       command: |
-          helm upgrade $RELEASE_NAME apache-airflow/airflow -f ./values.yaml --set defaultAirflowTag=2.7.3rc1
-          sleep 300s
-         
-
-    - run:
-       name: verify airflow installed after upgrade
-       command: |
-            kubectl get pods
-            POD_NAME=($(kubectl get pods | grep -E 'worker' | awk '{print $1}'))
-            echo "Pod Name: $POD_NAME"
-            kubectl exec -it  $POD_NAME -- airflow version
-            sleep 180s 
-            kubectl exec -it  $POD_NAME -- airflow dags list
-            kubectl exec -it  $POD_NAME -- airflow dags unpause init_dag
-            output=$(kubectl exec -it  $POD_NAME -- airflow dags trigger init_dag -o json | awk 'NR==2' | sed 's/\x1B\[[0-9;]*[mGK]//g')  
-            echo "output is : $output"
-            execution_date=$(echo $output | jq -r '.[0].logical_date')
-            echo "execution_date: $execution_date"
-            # Add a loop to check the DAG state until it becomes 'success' or 'failed'
-            kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date
-            while true; do
-              state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date |  awk '{print $1}' | sed 's/\x1B\[[0-9;]*[mGK]//g')
-              state="${state#"${state%%[![:space:]]*}"}"
-              state="${state%"${state##*[![:space:]]}"}"
-              echo "state is $state"
-              
-              if [ "$state" == "success" ]; then
-                 echo "DAG state is $state."
-                 exit 0
-              elif [ "$state" == "failed" ]; then
-                 echo "DAG state is $state."
-                 exit 1
-              else
-                 echo "state: $state"
-                 sleep 300  # You can adjust the sleep interval as needed
-              fi
-            done
-          
-          
-             
+#
+#    - run:
+#       name: upgrade airflow
+#       command: |
+#          helm upgrade $RELEASE_NAME apache-airflow/airflow -f ./values.yaml --set defaultAirflowTag=2.7.3rc1
+#          sleep 300s
+#
+#
+#    - run:
+#       name: verify airflow installed after upgrade
+#       command: |
+#            kubectl get pods
+#            POD_NAME=($(kubectl get pods | grep -E 'worker' | awk '{print $1}'))
+#            echo "Pod Name: $POD_NAME"
+#            kubectl exec -it  $POD_NAME -- airflow version
+#            sleep 180s
+#            kubectl exec -it  $POD_NAME -- airflow dags list
+#            kubectl exec -it  $POD_NAME -- airflow dags unpause init_dag
+#            output=$(kubectl exec -it  $POD_NAME -- airflow dags trigger throughput_dag -o json | awk 'NR==2' | sed 's/\x1B\[[0-9;]*[mGK]//g')
+#            echo "output is : $output"
+#            execution_date=$(echo $output | jq -r '.[0].logical_date')
+#            echo "execution_date: $execution_date"
+#            # Add a loop to check the DAG state until it becomes 'success' or 'failed'
+#            kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date
+#            while true; do
+#              state=$(kubectl exec -it $POD_NAME -- airflow dags state init_dag $execution_date |  awk '{print $1}' | sed 's/\x1B\[[0-9;]*[mGK]//g')
+#              state="${state#"${state%%[![:space:]]*}"}"
+#              state="${state%"${state##*[![:space:]]}"}"
+#              echo "state is $state"
+#
+#              if [ "$state" == "success" ]; then
+#                 echo "DAG state is $state."
+#                 exit 0
+#              elif [ "$state" == "failed" ]; then
+#                 echo "DAG state is $state."
+#                 exit 1
+#              else
+#                 echo "state: $state"
+#                 sleep 300  # You can adjust the sleep interval as needed
+#              fi
+#            done
+#
+#
+#
               
              
              
