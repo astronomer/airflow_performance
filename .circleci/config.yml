@@ -7,7 +7,7 @@ jobs:
       RELEASE_NAME: example-release
     machine:
       image: ubuntu-2004:202107-02
-    resource_class: xlarge
+    resource_class: 2xlarge
     steps:
     - checkout
     - run:

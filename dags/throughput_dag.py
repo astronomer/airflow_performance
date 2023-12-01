@@ -3,7 +3,7 @@ from datetime import date
 import time
 import pandas as pd
 
-import pygsheets
+#import pygsheets
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
@@ -102,25 +102,25 @@ def run_throughput_dag():
     min_value = data_series.min()
     worker_machine_type = os.environ["AIRFLOW__WORKER_MACHINE_TYPE"]
 
-    push_to_google_sheet(
-        [date.today().strftime("%d/%m/%Y"), "Astro", version, str(worker_machine_type), str(mean_value), str(max_value),
-         str(min_value), str(throughput_values[0]), str(throughput_values[-1])])
+    # push_to_google_sheet(
+    #     [date.today().strftime("%d/%m/%Y"), "Astro", version, str(worker_machine_type), str(mean_value), str(max_value),
+    #      str(min_value), str(throughput_values[0]), str(throughput_values[-1])])
     # Plot the throughput values
     # df = pd.DataFrame({'throughput': throughput_values})
     # df.plot(x='index', y='throughput')
 
 
-def push_to_google_sheet(audit_data: list[str]):
-    credentials_file = '/usr/local/airflow/dags/service-account-gcp.json'
-    sheet_name = 'Airflow Task Throughput - Astro vs MWAA'
-    gc = pygsheets.authorize(service_file=credentials_file)
-    sh = gc.open(sheet_name)
-    google_sheet = sh.worksheet_by_title("astro_vs_MWAA_2.6.3")
-    try:
-        google_sheet.append_table(values=audit_data, start="A1", overwrite=False)
-        print("Data updated successfully!")
-    except KeyError:
-        pass
+# def push_to_google_sheet(audit_data: list[str]):
+#     credentials_file = '/usr/local/airflow/dags/service-account-gcp.json'
+#     sheet_name = 'Airflow Task Throughput - Astro vs MWAA'
+#     gc = pygsheets.authorize(service_file=credentials_file)
+#     sh = gc.open(sheet_name)
+#     google_sheet = sh.worksheet_by_title("astro_vs_MWAA_2.6.3")
+#     try:
+#         google_sheet.append_table(values=audit_data, start="A1", overwrite=False)
+#         print("Data updated successfully!")
+#     except KeyError:
+#         pass
 
 
 default_args = {
