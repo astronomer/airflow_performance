@@ -3,7 +3,6 @@ from datetime import date
 import time
 import pandas as pd
 
-#import pygsheets
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
