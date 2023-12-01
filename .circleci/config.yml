@@ -7,7 +7,7 @@ jobs:
       RELEASE_NAME: example-release
     machine:
       image: ubuntu-2004:202107-02
-    resource_class: 2xlarge
+    resource_class: xlarge
     steps:
     - checkout
     - run:
@@ -55,7 +55,7 @@ jobs:
             POD_NAME=($(kubectl get pods | grep -E 'worker' | awk '{print $1}'))
             echo "Pod Name: $POD_NAME"
             kubectl exec -it  $POD_NAME -- airflow version
-            sleep 600s 
+            sleep 540s 
             kubectl exec -it  $POD_NAME -- airflow dags list
             kubectl exec -it  $POD_NAME -- airflow dags unpause throughput_dag
             output=$(kubectl exec -it  $POD_NAME -- airflow dags trigger throughput_dag -o json | awk 'NR==2' | sed 's/\x1B\[[0-9;]*[mGK]//g')  
