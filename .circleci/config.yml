@@ -35,6 +35,15 @@ jobs:
           sudo mv kubectl /usr/local/bin/
 
     - run:
+        name: docker custom build
+        command: |
+           cat <<EOM > Dockerfile
+           FROM quay.io/astronomer/astro-runtime-dev:10.0.0-alpha2
+           EOM
+           docker build --pull --tag my-dags:0.0.1 .
+           kind load docker-image my-dags:0.0.1
+
+    - run:
         name: install helm
         command: |
           curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
