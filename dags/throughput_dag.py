@@ -71,9 +71,9 @@ def run_throughput_dag():
     print("Creating test scenario/case results file for Task Throughput")
 
     throughput_values = []
+    unpause_all_dags()
+    time.sleep(30)
     for i in range(1, 500):
-        unpause_all_dags()
-        time.sleep(30)
         # print( "2.Check DB Count & Print")
         NUM_TASKS_BEGIN = check_for_ti_count()
         # print( "3.Sleep 2 minutes")
