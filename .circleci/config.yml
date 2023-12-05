@@ -37,9 +37,7 @@ jobs:
     - run:
         name: docker custom build
         command: |
-           cat <<EOM > Dockerfile
-           FROM quay.io/astronomer/astro-runtime-dev:10.0.0-alpha2
-           EOM
+           echo 'FROM quay.io/astronomer/astro-runtime-dev:10.0.0-alpha2-base' > Dockerfile
            docker build --pull --tag my-dags:0.0.1 .
            kind load docker-image my-dags:0.0.1
 
